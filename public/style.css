@@ -1,0 +1,62 @@
+* {
+  box-sizing: border-box;
+}
+html {
+  margin: 0;
+}
+
+body {
+  font-family: serif;
+  margin: 8px;
+  line-height: 1.2;
+}
+
+.app {
+  max-width: 500px;
+}
+
+.header {
+  margin-bottom: 10px;
+}
+
+.logo {
+  display: block;
+  width: 96px;
+  height: 96px;
+}
+
+.clock {
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.clock__value {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 15px;
+}
+
+.clock__icon {
+  display: inline-block;
+  vertical-align: middle;
+  width: 15px;
+  height: 15px;
+  border-radius: 15px;
+}
+
+.clock__icon--day {
+  background-color: #ef7b00;
+}
+
+.clock__icon--night {
+  background-color: #2459a7;
+}
+
+.lot {
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
