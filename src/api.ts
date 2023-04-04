@@ -1,4 +1,6 @@
-const lots = [
+import { Lot, LotId } from 'typings/lot';
+
+const lots: Lot[] = [
   {
     id: 0,
     name: 'Apple',
@@ -13,8 +15,12 @@ const lots = [
   },
 ];
 
-export const api = {
-  get(url) {
+interface Api {
+  get(url: string) : Promise<Lot[] > | void
+}
+
+export const api: Api = {
+  get(url: string): Promise<Lot[] >| void {
     switch (url) {
       case '/lots':
         return new Promise((resolve) => {
@@ -32,12 +38,12 @@ export const stream = {
   getRandomValue() {
     return Math.round(Math.random() * 10 + 30);
   },
-  subscribe(listener, callback) {
+  subscribe(listener: string, callback: (value: {id: LotId, price: number}) => void) {
     this.listeners.set(listener, callback);
   },
   dispatchEvent() {
     this.listeners.forEach(((callback, channel) => {
-      callback({ id: Number(/price-(\d+)/.exec(channel)[1]), price: this.getRandomValue() });
+      callback({ id: Number(/price-(\d+)/.exec(channel)?.[1]), price: this.getRandomValue() });
     }));
   },
 };

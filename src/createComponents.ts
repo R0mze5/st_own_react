@@ -1,8 +1,19 @@
+import { Lot } from 'typings/lot';
+import { State } from 'typings/state';
+
 function Logo() {
   const logo = document.createElement('img');
   logo.className = 'logo';
   logo.src = './logo.svg';
   return logo;
+
+  // return new Element('img', { className: 'logo', src: './logo.svg' });
+
+  // return {
+  //   tag: 'img',
+  //   attributes: { className: 'logo', src: './logo.svg' },
+  //   children: [],
+  // };
 }
 
 function Header() {
@@ -12,7 +23,10 @@ function Header() {
   return header;
 }
 
-export function Clock({ time }) {
+interface ClockProps {
+ readonly time: Date
+}
+export function Clock({ time }:ClockProps) {
   const clock = document.createElement('div');
   clock.className = 'clock';
 
@@ -34,13 +48,18 @@ export function Clock({ time }) {
   return clock;
 }
 
-function Lot({ lot }) {
+interface LotProps {
+  readonly lot: Lot
+}
+function LotComponent({ lot }: LotProps) {
   const node = document.createElement('article');
   node.className = 'lot';
+  // add compare for list
+  node.dataset.key = lot.id.toString();
 
   const lotPrice = document.createElement('div');
   lotPrice.className = 'lot__price';
-  lotPrice.innerText = lot.price;
+  lotPrice.innerText = lot.price.toString();
   node.append(lotPrice);
 
   const lotName = document.createElement('h2');
@@ -63,7 +82,10 @@ function Loading() {
   return node;
 }
 
-function Lots({ lots }) {
+interface LotsProps {
+  readonly lots: Lot[] | null
+}
+function Lots({ lots }:LotsProps) {
   if (!lots) {
     return Loading();
   }
@@ -71,13 +93,16 @@ function Lots({ lots }) {
   const node = document.createElement('div');
   node.className = 'lots';
   lots.forEach((lot) => {
-    node.append(Lot({ lot }));
+    node.append(LotComponent({ lot }));
   });
 
   return node;
 }
 
-export function App({ state }) {
+interface AppProps {
+  state: State
+}
+export function App({ state }: AppProps) {
   const app = document.createElement('div');
   app.className = 'app';
   app.append(Header());
