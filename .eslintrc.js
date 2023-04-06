@@ -47,6 +47,14 @@ module.exports = {
         'no-plusplus': 0,
 
         'import/no-unresolved': 0,
+        'max-len': 0,
+        'no-nested-ternary': 0,
+      },
+    },
+    {
+      files: ['typings/**/*.ts'],
+      rules: {
+        'no-use-before-define': 0,
       },
     },
   ],

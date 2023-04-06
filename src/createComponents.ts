@@ -1,112 +1,168 @@
+import { ComponentReturnType } from 'typings/components';
 import { Lot } from 'typings/lot';
 import { State } from 'typings/state';
 
-function Logo() {
-  const logo = document.createElement('img');
-  logo.className = 'logo';
-  logo.src = './logo.svg';
-  return logo;
+// function Block(props:any) {
+//   return {
+//     type: 'div',
+//     props: { className: 'block',children: props.children, },
+//   };
+// }
+
+function Logo():ComponentReturnType {
+  // const logo = document.createElement('img');
+  // logo.className = 'logo';
+  // logo.src = './logo.svg';
+  // return logo;
 
   // return new Element('img', { className: 'logo', src: './logo.svg' });
 
-  // return {
-  //   tag: 'img',
-  //   attributes: { className: 'logo', src: './logo.svg' },
-  //   children: [],
-  // };
+  return {
+    type: 'img',
+    props: { className: 'logo', src: './logo.svg' },
+  };
 }
 
-function Header() {
-  const header = document.createElement('header');
-  header.className = 'header';
-  header.append(Logo());
-  return header;
+function Header():ComponentReturnType {
+  return {
+    type: 'header',
+    props: {
+      className: 'header',
+      children: [{
+        type: Logo,
+      }],
+    },
+
+  };
 }
 
 interface ClockProps {
  readonly time: Date
 }
-export function Clock({ time }:ClockProps) {
-  const clock = document.createElement('div');
-  clock.className = 'clock';
-
-  const value = document.createElement('span');
-  value.className = 'clock__value';
-  value.innerText = time.toLocaleTimeString();
-  clock.append(value);
-
-  const icon = document.createElement('span');
-  icon.className = 'clock__icon';
-  if (time.getHours() >= 7 && time.getHours() < 21) {
-    icon.classList.add(`${icon.className}--day`);
-  } else {
-    icon.classList.add(`${icon.className}--night`);
-  }
-  // icon.innerText = time.toLocaleTimeString();
-  clock.append(icon);
-
-  return clock;
+export function Clock({ time }:ClockProps):ComponentReturnType {
+  const isDay = time.getHours() >= 7 && time.getHours() < 21;
+  return {
+    type: 'div',
+    props: {
+      className: 'clock',
+      children: [
+        {
+          type: 'span',
+          props: {
+            className: 'clock__value',
+            children: [time.toLocaleTimeString()],
+          },
+        },
+        {
+          type: 'span',
+          props: {
+            className: `clock__icon clock__icon${isDay ? '--day' : '--night'}`,
+          },
+        },
+      ],
+    },
+  };
 }
 
 interface LotProps {
   readonly lot: Lot
 }
-function LotComponent({ lot }: LotProps) {
-  const node = document.createElement('article');
-  node.className = 'lot';
-  // add compare for list
-  node.dataset.key = lot.id.toString();
+function LotComponent({ lot }: LotProps):ComponentReturnType {
+  return {
+    type: 'article',
+    props: {
+      className: 'lot',
+      key: lot.id.toString(),
 
-  const lotPrice = document.createElement('div');
-  lotPrice.className = 'lot__price';
-  lotPrice.innerText = lot.price.toString();
-  node.append(lotPrice);
-
-  const lotName = document.createElement('h2');
-  lotName.className = 'lot__name';
-  lotName.innerText = lot.name;
-  node.append(lotName);
-
-  const lotDescription = document.createElement('p');
-  lotDescription.className = 'lot__description';
-  lotDescription.innerText = lot.description;
-
-  node.append(lotDescription);
-  return node;
+      children: [
+        {
+          type: 'div',
+          key: lot.id.toString(),
+          props: {
+            className: 'lot__price',
+            children: [
+              lot.price.toString(),
+            ],
+          },
+        },
+        {
+          type: 'h5',
+          props: {
+            className: 'lot__name',
+            children: [
+              lot.name,
+            ],
+          },
+        },
+        {
+          type: 'p',
+          props: {
+            className: 'lot__description',
+            children: [
+              lot.description,
+            ],
+          },
+        },
+      ],
+    },
+  };
 }
 
-function Loading() {
-  const node = document.createElement('div');
-  node.className = 'loading';
-  node.innerText = 'Loading...';
-  return node;
+function Loading():ComponentReturnType {
+  return {
+    type: 'div',
+    props: {
+      className: 'loading',
+      children: [
+        'Loading...',
+      ],
+    },
+  };
 }
 
 interface LotsProps {
   readonly lots: Lot[] | null
 }
-function Lots({ lots }:LotsProps) {
+function Lots({ lots }:LotsProps):ComponentReturnType {
   if (!lots) {
-    return Loading();
+    return {
+      type: Loading,
+    };
   }
 
-  const node = document.createElement('div');
-  node.className = 'lots';
-  lots.forEach((lot) => {
-    node.append(LotComponent({ lot }));
-  });
-
-  return node;
+  return {
+    type: 'div',
+    props: {
+      className: 'lots',
+      children: lots.map((lot) => ({
+        type: LotComponent,
+        props: { lot },
+      })),
+    },
+  };
 }
 
 interface AppProps {
   state: State
 }
-export function App({ state }: AppProps) {
-  const app = document.createElement('div');
-  app.className = 'app';
-  app.append(Header());
-  app.append(Clock({ time: state.time }));
-  app.append(Lots({ lots: state.lots }));
-  return app;
+export function App({ state }: AppProps):ComponentReturnType {
+  return {
+    type: 'div',
+    props: {
+      className: 'app',
+      children: [
+        {
+          type: Header,
+        },
+        {
+          type: Clock,
+          props: { time: state.time },
+        },
+        {
+          type: Lots,
+          props: { lots: state.lots },
+        },
+      ],
+    },
+  };
 }

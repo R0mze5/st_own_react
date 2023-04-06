@@ -1,7 +1,7 @@
 import { State } from 'typings/state';
 import { LotId } from 'typings/lot';
 
-import { App, Clock } from './createComponents';
+import { App } from './createComponents';
 import { api, stream } from './api';
 import { render } from './render';
 
