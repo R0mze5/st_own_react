@@ -34,4 +34,20 @@
 
 </body>
 
+<script>
+  const scripts = document.querySelectorAll('script[type="text/own"]')
+
+  function transpileCode(code) {
+    // ...
+    return code
+  }
+
+  scripts.forEach((el) => {
+    const script = document.createElement('script');
+
+    script.text = transpileCode(el.text)
+    document.append(script)
+  })
+</script>
+
 </html>
