@@ -5,11 +5,7 @@ import { App } from "./createComponents";
 import { api, stream } from "./api";
 import { render } from "./render";
 import { VDom } from "./createElement";
-
-let state: State = {
-  time: new Date(),
-  lots: null,
-};
+import { store } from "./store";
 
 function renderView(appState: State) {
   const rootElement = document.getElementById("root");
@@ -18,28 +14,25 @@ function renderView(appState: State) {
   }
 }
 
-renderView(state);
+store.subscribe((state) => {
+  renderView(state);
+});
+
+renderView(store.getState());
 
 setInterval(() => {
-  state = {
-    ...state,
+  store.changeState({
     time: new Date(),
-  };
-
-  renderView(state);
+  });
 }, 1000);
 
 api.get("/lots")?.then((lots) => {
-  state = {
-    ...state,
+  store.changeState({
     lots,
-  };
-
-  renderView(state);
+  });
 
   const onPrice = (data: { id: LotId; price: number }) => {
-    state = {
-      ...state,
+    store.changeState((state) => ({
       lots:
         state?.lots?.map((lot) => {
           if (data.id === lot.id) {
@@ -51,9 +44,7 @@ api.get("/lots")?.then((lots) => {
 
           return lot;
         }) ?? null,
-    };
-
-    renderView(state);
+    }));
   };
 
   lots.forEach((lot) => {
