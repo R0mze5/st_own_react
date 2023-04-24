@@ -1,11 +1,15 @@
-import { State } from "typings/state";
-import { LotId } from "typings/lot";
+import { Lot, LotId } from "typings/lot";
 
 import { App } from "./createComponents";
 import { api, stream } from "./api";
 import { render } from "./render";
 import { VDom } from "./createElement";
-import { store } from "./store";
+import { State, store } from "./store/index";
+import {
+  createTimeAction,
+  createSetLotsAction,
+  createSetLotPriceAction,
+} from "./store/actions";
 
 function renderView(appState: State) {
   const rootElement = document.getElementById("root");
@@ -21,30 +25,14 @@ store.subscribe((state) => {
 renderView(store.getState());
 
 setInterval(() => {
-  store.changeState({
-    time: new Date(),
-  });
+  store.dispatch(createTimeAction({ time: new Date() }));
 }, 1000);
 
 api.get("/lots")?.then((lots) => {
-  store.changeState({
-    lots,
-  });
+  store.dispatch(createSetLotsAction({ lots }));
 
   const onPrice = (data: { id: LotId; price: number }) => {
-    store.changeState((state) => ({
-      lots:
-        state?.lots?.map((lot) => {
-          if (data.id === lot.id) {
-            return {
-              ...lot,
-              price: data.price,
-            };
-          }
-
-          return lot;
-        }) ?? null,
-    }));
+    store.dispatch(createSetLotPriceAction({ id: data.id, price: data.price }));
   };
 
   lots.forEach((lot) => {

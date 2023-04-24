@@ -1,7 +1,7 @@
 import { ComponentReturnType } from "typings/components";
 import { Lot } from "typings/lot";
-import { State } from "typings/state";
 import { VDom } from "./createElement";
+import { State } from "./store/index";
 
 function Logo(): ComponentReturnType {
   return VDom.createElement("img", { className: "logo", src: "./logo.svg" });
@@ -114,7 +114,7 @@ export function App({ state }: AppProps): ComponentReturnType {
       className: "app",
     },
     VDom.createElement(Header),
-    VDom.createElement(Clock, { time: state.time }),
-    VDom.createElement(Lots, { lots: state.lots })
+    VDom.createElement(Clock, { time: state.clock.time }),
+    VDom.createElement(Lots, { lots: state.data.lots })
   );
 }

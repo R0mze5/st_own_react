@@ -52,6 +52,12 @@ module.exports = {
       },
     },
     {
+      files: ["src/store/**/*.ts"],
+      rules: {
+        "default-param-last": 0,
+      },
+    },
+    {
       files: ["typings/**/*.ts"],
       rules: {
         "no-use-before-define": 0,
