@@ -60,3 +60,23 @@ body {
   border-radius: 6px;
   margin-bottom: 10px;
 }
+
+.lot--favorite {
+  background-color: #ffd7cb;
+  border-color: #ffd7cb;
+}
+.button {
+  cursor: pointer;
+  background-color: #fff;
+  border: 1px solid #999;
+  color: #000;
+  border-radius: 4px;
+  padding: 4px 6px;
+  font-size: 0.8rem;
+  outline: none;
+}
+
+.button--favorite {
+  color: #dc0000;
+  border-color: #ff8c68;
+}

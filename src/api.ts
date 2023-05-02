@@ -6,17 +6,20 @@ const lots: Lot[] = [
     name: "Apple",
     description: "Apple description",
     price: 16,
+    favorite: true,
   },
   {
     id: 1,
     name: "Orange",
     description: "Orange description",
     price: 41,
+    favorite: false,
   },
 ];
 
 interface Api {
   get(url: string): Promise<Lot[]> | void;
+  post(url: string): Promise<void>;
 }
 
 export const api: Api = {
@@ -24,12 +27,17 @@ export const api: Api = {
     switch (url) {
       case "/lots":
         return new Promise((resolve) => {
-          setTimeout(() => resolve(lots), 3000);
+          setTimeout(() => resolve(lots), 1000);
         });
 
       default:
         throw new Error("unexpected route");
     }
+  },
+  post(url: string): Promise<void> {
+    return new Promise((resolve) => {
+      setTimeout(() => resolve(), 300);
+    });
   },
 };
 

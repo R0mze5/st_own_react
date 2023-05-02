@@ -5,4 +5,5 @@ export interface Lot {
   name: string;
   description: string;
   price: number;
+  favorite: boolean;
 }

@@ -1,4 +1,4 @@
-import { Lot, LotId } from "typings/lot";
+import { LotId } from "typings/lot";
 
 import { App } from "./createComponents";
 import { api, stream } from "./api";
@@ -9,20 +9,27 @@ import {
   createTimeAction,
   createSetLotsAction,
   createSetLotPriceAction,
+  setLotFavorite,
+  setLotUnfavorite,
 } from "./store/actions";
 
-function renderView(appState: State) {
+function renderView(appStore: typeof store) {
   const rootElement = document.getElementById("root");
   if (rootElement) {
-    render(VDom.createElement(App, { state: appState }), rootElement);
+    render(
+      VDom.createElement(App, {
+        store: appStore,
+      }),
+      rootElement
+    );
   }
 }
 
-store.subscribe((state) => {
-  renderView(state);
+store.subscribe(() => {
+  renderView(store);
 });
 
-renderView(store.getState());
+renderView(store);
 
 setInterval(() => {
   store.dispatch(createTimeAction({ time: new Date() }));

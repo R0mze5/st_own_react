@@ -1,3 +1,6 @@
+import { ComponentReturnType } from "typings/components";
+import { VDom } from "../createElement";
+
 export type Action<P = unknown, T extends string = string> = {
   type: T;
   payload: P;
@@ -31,12 +34,18 @@ export function combineReducers<S extends {}, A extends Action>(
   };
 }
 
-export class Store<T extends object, A extends Action> {
-  reducer: Reducer<T, A>;
+export interface IStore<T extends object, A extends Action> {
+  state: T;
+  getState: () => T;
+  dispatch: (action: A) => void;
+}
+
+export class Store<T extends object, A extends Action> implements IStore<T, A> {
+  private reducer: Reducer<T, A>;
 
   state: T;
 
-  listeners = new Set<(state: T) => void>();
+  private listeners = new Set<(state: T) => void>();
 
   constructor(reducer: Reducer<T, A>, state?: T | undefined) {
     this.reducer = reducer;
@@ -74,9 +83,39 @@ export class Store<T extends object, A extends Action> {
     this.listeners.delete(listener);
   };
 
-  dispatch = (action: A) => {
+  dispatch = (action: A): void => {
     this.state = this.reducer(this.state, action);
 
     this.listeners.forEach((listener) => listener(this.state));
+  };
+}
+
+export function connect<
+  S extends IStore<object, any>,
+  SP extends object | null,
+  DP extends object | null | undefined,
+  OP extends {
+    store: S;
+  } & object
+>(
+  mapStateToProps: ((s: S["state"]) => SP) | null,
+  mapDispatchToProps?: (d: S["dispatch"]) => DP
+) {
+  return (WrappedComponent: (props: SP & DP & OP) => ComponentReturnType) => {
+    return ({ store, ...ownProps }: { store: S }) => {
+      // we can replace it on class component with method "render" to remove store.subscribe from /src/index.ts
+      const el = () => {
+        const state = store.getState();
+
+        return VDom.createElement(WrappedComponent, {
+          ...ownProps,
+          ...(mapStateToProps ? mapStateToProps(state) : {}),
+          ...(mapDispatchToProps ? mapDispatchToProps(store.dispatch) : {}),
+          store,
+        });
+      };
+
+      return VDom.createElement(el);
+    };
   };
 }

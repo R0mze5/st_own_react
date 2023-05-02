@@ -27,7 +27,22 @@ export const createSetLotPriceAction = (payload: {
   payload,
 });
 
+export const setLotFavorite = (payload: {
+  id: LotId;
+}): Action<{ id: LotId }, typeof ACTION_TYPES.SET_LOT_FAVORITE> => ({
+  type: ACTION_TYPES.SET_LOT_FAVORITE,
+  payload,
+});
+export const setLotUnfavorite = (payload: {
+  id: LotId;
+}): Action<{ id: LotId }, typeof ACTION_TYPES.SET_LOT_UNFAVORITE> => ({
+  type: ACTION_TYPES.SET_LOT_UNFAVORITE,
+  payload,
+});
+
 export type AppReducerActions =
   | ReturnType<typeof createTimeAction>
   | ReturnType<typeof createSetLotsAction>
-  | ReturnType<typeof createSetLotPriceAction>;
+  | ReturnType<typeof createSetLotPriceAction>
+  | ReturnType<typeof setLotFavorite>
+  | ReturnType<typeof setLotUnfavorite>;

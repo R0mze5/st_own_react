@@ -23,6 +23,15 @@ function sync(virtualNode: VirtualComponentReturnType, realNode: Node) {
             return;
           }
 
+          if (typeof value === "function") {
+            if (name.startsWith("on")) {
+              if (name === "onClick") {
+                realNode.onclick = value;
+              }
+            }
+            return;
+          }
+
           if (realNode.getAttribute(name) !== value) {
             if (name === "className") {
               realNode.setAttributeNS(null, "class", value);

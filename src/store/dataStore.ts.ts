@@ -40,6 +40,36 @@ export const dataReducer: Reducer<DataState, AppReducerActions> = (
             return lot;
           }) ?? null,
       };
+    case ACTION_TYPES.SET_LOT_FAVORITE:
+      return {
+        ...state,
+        lots:
+          state?.lots?.map((lot) => {
+            if (action.payload.id === lot.id) {
+              return {
+                ...lot,
+                favorite: true,
+              };
+            }
+
+            return lot;
+          }) ?? null,
+      };
+    case ACTION_TYPES.SET_LOT_UNFAVORITE:
+      return {
+        ...state,
+        lots:
+          state?.lots?.map((lot) => {
+            if (action.payload.id === lot.id) {
+              return {
+                ...lot,
+                favorite: false,
+              };
+            }
+
+            return lot;
+          }) ?? null,
+      };
 
     default:
       return state;
