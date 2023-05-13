@@ -1,6 +1,7 @@
 import { Lot, LotId } from "typings/lot";
 import { ACTION_TYPES } from "./actionTypes";
-import { Action } from "./createStore";
+import { Action } from "./lib/types";
+import { setLocationAction } from "./location/actions";
 
 export const createTimeAction = (payload: {
   time: Date;
@@ -45,4 +46,5 @@ export type AppReducerActions =
   | ReturnType<typeof createSetLotsAction>
   | ReturnType<typeof createSetLotPriceAction>
   | ReturnType<typeof setLotFavorite>
-  | ReturnType<typeof setLotUnfavorite>;
+  | ReturnType<typeof setLotUnfavorite>
+  | ReturnType<typeof setLocationAction>;

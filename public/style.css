@@ -80,3 +80,16 @@ body {
   color: #dc0000;
   border-color: #ff8c68;
 }
+
+.router__links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.router__link {
+  display: block;
+  padding: 4px 8px;
+  border-bottom: 1px solid #000;
+  cursor: pointer;
+  text-decoration: none;
+}

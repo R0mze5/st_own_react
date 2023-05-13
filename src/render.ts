@@ -4,8 +4,12 @@ import {
 } from "typings/components";
 
 function createRealNodeFromVirtual(
-  virtualNode: VirtualComponentReturnType | string
-): Node {
+  virtualNode: VirtualComponentReturnType
+): Node | null {
+  if (!virtualNode) {
+    return null;
+  }
+
   if (typeof virtualNode === "string") {
     return document.createTextNode(virtualNode);
   }
@@ -13,7 +17,15 @@ function createRealNodeFromVirtual(
   return document.createElement(virtualNode.type);
 }
 
-function sync(virtualNode: VirtualComponentReturnType, realNode: Node) {
+function sync(
+  virtualNode: VirtualComponentReturnType,
+  realNode: Node | null
+): void {
+  if (virtualNode === null || realNode === null) {
+    realNode?.parentNode?.removeChild(realNode);
+    return;
+  }
+
   if (realNode instanceof HTMLElement) {
     // sync element
     if (typeof virtualNode !== "string") {
@@ -72,12 +84,19 @@ function sync(virtualNode: VirtualComponentReturnType, realNode: Node) {
     const virtualChild = virtualChildren[index] as VirtualComponentReturnType;
     const realChild: Node = realChildren[index];
     // remove
-    if (virtualChild === undefined && realChild !== undefined) {
+    if (
+      (virtualChild === undefined || virtualChild === null) &&
+      realChild !== undefined
+    ) {
       realNode.removeChild(realChild);
     }
     // update/replace
 
-    if (virtualChild !== undefined && realChild !== undefined) {
+    if (
+      virtualChild !== undefined &&
+      virtualChild !== null &&
+      realChild !== undefined
+    ) {
       if (
         realChild instanceof HTMLElement &&
         (typeof virtualChild === "object" ? virtualChild.type : "") ===
@@ -89,13 +108,21 @@ function sync(virtualNode: VirtualComponentReturnType, realNode: Node) {
 
         sync(virtualChild, newRealChild);
 
-        realNode.replaceChild(newRealChild, realChild);
+        if (newRealChild) {
+          realNode.replaceChild(newRealChild, realChild);
+        } else {
+          realNode.removeChild(realChild);
+        }
       }
     }
 
     // add
 
-    if (virtualChild !== undefined && realChild === undefined) {
+    if (
+      virtualChild !== undefined &&
+      virtualChild !== null &&
+      (realChild === undefined || realChild === null)
+    ) {
       const newRealChild = createRealNodeFromVirtual(virtualChild);
 
       if (newRealChild) {
@@ -110,7 +137,7 @@ function sync(virtualNode: VirtualComponentReturnType, realNode: Node) {
 function evaluate(
   virtualNode: ComponentReturnType | string
 ): VirtualComponentReturnType {
-  if (typeof virtualNode !== "object") {
+  if (typeof virtualNode !== "object" || virtualNode === null) {
     return virtualNode;
   }
 

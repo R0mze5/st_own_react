@@ -1,6 +1,6 @@
 import { ACTION_TYPES } from "./actionTypes";
 import { AppReducerActions } from "./actions";
-import { Reducer } from "./createStore";
+import { Reducer } from "./lib/types";
 
 export interface ClockState {
   time: Date;

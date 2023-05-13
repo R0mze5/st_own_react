@@ -15,7 +15,7 @@ export const VDom = {
     if (children.length === 1 && Array.isArray(children[0])) {
       // eslint-disable-next-line prefer-destructuring
       props.children = children[0];
-    } else {
+    } else if (!props.children) {
       props.children = children;
     }
 

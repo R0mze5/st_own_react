@@ -1,7 +1,7 @@
 import { Lot } from "typings/lot";
 import { ACTION_TYPES } from "./actionTypes";
 import { AppReducerActions } from "./actions";
-import { Reducer } from "./createStore";
+import { Reducer } from "./lib/types";
 
 export interface DataState {
   lots: Lot[] | null;

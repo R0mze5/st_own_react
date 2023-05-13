@@ -1,6 +1,6 @@
 import { LotId } from "typings/lot";
 
-import { App } from "./createComponents";
+import App from "./App";
 import { api, stream } from "./api";
 import { render } from "./render";
 import { VDom } from "./createElement";
@@ -9,8 +9,6 @@ import {
   createTimeAction,
   createSetLotsAction,
   createSetLotPriceAction,
-  setLotFavorite,
-  setLotUnfavorite,
 } from "./store/actions";
 
 function renderView(appStore: typeof store) {

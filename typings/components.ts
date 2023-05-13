@@ -12,11 +12,11 @@ export type ComponentProps = {
   [key: string]: any;
 };
 
-export interface ComponentReturnType {
+export type ComponentReturnType<Props = {}> = {
   type: ComponentType;
   key?: string;
-  props?: ComponentProps;
-}
+  props: ComponentProps & Props;
+} | null;
 
 //
 
@@ -24,6 +24,7 @@ export type VirtualComponentReturnType =
   | {
       type: string;
       key?: string;
-      props?: ComponentProps;
+      props: ComponentProps;
     }
-  | string;
+  | string
+  | null;

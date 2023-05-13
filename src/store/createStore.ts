@@ -1,15 +1,6 @@
 import { ComponentReturnType } from "typings/components";
 import { VDom } from "../createElement";
-
-export type Action<P = unknown, T extends string = string> = {
-  type: T;
-  payload: P;
-};
-
-export type Reducer<
-  S extends object | undefined = undefined,
-  A extends Action | undefined = Action
-> = (state: S | undefined, action: A | null) => S;
+import { Action, Reducer } from "./lib/types";
 
 type MergeReducer<T, A extends Action> = {
   [K in keyof T]: T[K] extends object ? Reducer<T[K], A> : never;
